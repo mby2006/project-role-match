@@ -1,0 +1,27 @@
+# Project Role Match
+
+> A portable Agent Skill for analyzing project source against a target role or job description and producing a source-backed Markdown and standalone offline HTML interview report.
+
+## Install
+
+Resolve the repository containing this file, or ask for the local checkout path if it is unclear. Install the entire inner project-role-match/ directory, including SKILL.md, bin/ and references/. Use the agent and scope specified by the user. Default to the active agent and the current project when both are clear.
+
+For a local checkout, run from the target project:
+
+    npx skills add "<absolute-path-to-inner-skill-directory>" --skill project-role-match --copy
+
+Pass --agent with the requested tool ID, and repeat --agent to select multiple tools. See https://github.com/vercel-labs/skills/blob/main/docs/agents.md for IDs and directories. Use --global for user-wide installation when requested. For a hosted repository, use its actual URL or the URL of the inner directory when the host supports that source format.
+
+For an offline install, copy the inner directory into the requested tool's skill directory so the resulting path ends in project-role-match/SKILL.md. If an existing installation is present, inspect it before replacing it.
+
+Verify the installed files with Node.js 20 or later:
+
+    node "<installed-skill-directory>/bin/project-role-match.mjs" doctor
+
+Report the installation path and doctor result. Installation and repository analysis are separate invocations.
+
+## Use
+
+Open the project and ask the agent to use project-role-match with a target role or JD. The same instruction works by pointing an agent directly at project-role-match/SKILL.md without installing it.
+
+For chat assistants, supply that SKILL.md, the relevant project files and the role or JD. The assistant can return Markdown in chat. Node.js 20+ and command execution enable automated citation checks and report quality gates. New reports should pass `--quality strict`, which blocks missing category or analysis, fewer than three interview questions per match, and insufficient category coverage unless declared via `coverage`. With project write access, `write` saves matching .md and .html reports under .project-role-match/ in the target project root; the HTML file is standalone and works offline. It also writes a .receipt.json quality receipt recording every gate, warnings, counts, and SHA-256 hashes of both report artifacts. Run `verify --root <project-root> --receipt <receipt.json>` to recompute those hashes and detect missing, modified, or out-of-project artifacts.

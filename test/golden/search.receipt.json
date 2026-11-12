@@ -1,0 +1,88 @@
+{
+  "schema": "project-role-match.receipt/1",
+  "tool": {
+    "name": "project-role-match",
+    "version": "<version>"
+  },
+  "generatedAt": "<generatedAt>",
+  "ok": true,
+  "role": "前端开发",
+  "basis": "按前端开发岗的通用职责分析，重点检查交互性能、请求生命周期和可访问性。",
+  "scope": "搜索组件的防抖、请求取消、状态处理与键盘/ARIA 实现，以及请求封装。",
+  "revision": "本次检查的是工作区文件。",
+  "declaredCoverage": [
+    "交互与性能",
+    "异常处理",
+    "可访问性"
+  ],
+  "summary": {
+    "matches": 3,
+    "citations": 14,
+    "questions": 9,
+    "categories": [
+      "交互与性能",
+      "异常处理",
+      "可访问性"
+    ],
+    "gaps": 2
+  },
+  "quality": {
+    "profile": "strict",
+    "ok": true,
+    "gates": [
+      {
+        "id": "citations",
+        "status": "pass",
+        "checked": 14,
+        "total": 14,
+        "issues": []
+      },
+      {
+        "id": "structure",
+        "status": "pass",
+        "checked": 3,
+        "total": 3,
+        "issues": []
+      },
+      {
+        "id": "questions",
+        "status": "pass",
+        "checked": 3,
+        "total": 3,
+        "minimumPerMatch": 3,
+        "totalQuestions": 9,
+        "issues": []
+      },
+      {
+        "id": "coverage",
+        "status": "pass",
+        "mode": "declared",
+        "expected": [
+          "交互与性能",
+          "异常处理",
+          "可访问性"
+        ],
+        "covered": [
+          "交互与性能",
+          "异常处理",
+          "可访问性"
+        ],
+        "issues": []
+      }
+    ],
+    "errors": [],
+    "warnings": []
+  },
+  "artifacts": {
+    "markdown": {
+      "path": ".project-role-match/<date>-前端开发.md",
+      "sha256": "e11c9bccbc421510e2e1fc5481dc589d46d5f0237a2b4398c0f8f6fb259c6e75",
+      "bytes": 6892
+    },
+    "html": {
+      "path": ".project-role-match/<date>-前端开发.html",
+      "sha256": "dcab95425afcb0c0444d6dd426fc6210eb34bb01aeb785cdf773dd049efd7229",
+      "bytes": 23757
+    }
+  }
+}

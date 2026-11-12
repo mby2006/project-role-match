@@ -1,0 +1,76 @@
+{
+  "schema": "project-role-match.receipt/1",
+  "tool": {
+    "name": "project-role-match",
+    "version": "<version>"
+  },
+  "generatedAt": "<generatedAt>",
+  "ok": true,
+  "role": "后端开发",
+  "basis": "按后端开发岗的通用职责分析，重点检查接口和数据库写入。",
+  "scope": "预约样例的路由注册函数、写入 SQL 和建表定义。",
+  "revision": "",
+  "declaredCoverage": null,
+  "summary": {
+    "matches": 1,
+    "citations": 3,
+    "questions": 3,
+    "categories": [
+      "数据库与数据一致性"
+    ],
+    "gaps": 1
+  },
+  "quality": {
+    "profile": "strict",
+    "ok": true,
+    "gates": [
+      {
+        "id": "citations",
+        "status": "pass",
+        "checked": 3,
+        "total": 3,
+        "issues": []
+      },
+      {
+        "id": "structure",
+        "status": "pass",
+        "checked": 1,
+        "total": 1,
+        "issues": []
+      },
+      {
+        "id": "questions",
+        "status": "pass",
+        "checked": 1,
+        "total": 1,
+        "minimumPerMatch": 3,
+        "totalQuestions": 3,
+        "issues": []
+      },
+      {
+        "id": "coverage",
+        "status": "pass",
+        "mode": "distinct-categories",
+        "expected": 1,
+        "covered": [
+          "数据库与数据一致性"
+        ],
+        "issues": []
+      }
+    ],
+    "errors": [],
+    "warnings": []
+  },
+  "artifacts": {
+    "markdown": {
+      "path": ".project-role-match/<date>-后端开发.md",
+      "sha256": "95c85ec308d012dd4db658d8d43f4229ca48bceaf2f6893fa21ce6dac330218e",
+      "bytes": 2637
+    },
+    "html": {
+      "path": ".project-role-match/<date>-后端开发.html",
+      "sha256": "2431f3062c6d04399c0059247298f4edd0455c90269b033d3ec78d32eedacd49",
+      "bytes": 16797
+    }
+  }
+}

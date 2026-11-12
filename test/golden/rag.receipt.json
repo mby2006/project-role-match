@@ -1,0 +1,88 @@
+{
+  "schema": "project-role-match.receipt/1",
+  "tool": {
+    "name": "project-role-match",
+    "version": "<version>"
+  },
+  "generatedAt": "<generatedAt>",
+  "ok": true,
+  "role": "AI 应用开发",
+  "basis": "按 AI 应用开发岗的通用职责分析，重点检查检索质量、模型调用稳定性和离线评测。",
+  "scope": "RAG 示例的文档切分、检索阈值、模型调用重试和离线评测函数。",
+  "revision": "本次检查的是工作区文件。",
+  "declaredCoverage": [
+    "检索与切分",
+    "稳定性与重试",
+    "评测与验证"
+  ],
+  "summary": {
+    "matches": 3,
+    "citations": 12,
+    "questions": 9,
+    "categories": [
+      "检索与切分",
+      "稳定性与重试",
+      "评测与验证"
+    ],
+    "gaps": 2
+  },
+  "quality": {
+    "profile": "strict",
+    "ok": true,
+    "gates": [
+      {
+        "id": "citations",
+        "status": "pass",
+        "checked": 12,
+        "total": 12,
+        "issues": []
+      },
+      {
+        "id": "structure",
+        "status": "pass",
+        "checked": 3,
+        "total": 3,
+        "issues": []
+      },
+      {
+        "id": "questions",
+        "status": "pass",
+        "checked": 3,
+        "total": 3,
+        "minimumPerMatch": 3,
+        "totalQuestions": 9,
+        "issues": []
+      },
+      {
+        "id": "coverage",
+        "status": "pass",
+        "mode": "declared",
+        "expected": [
+          "检索与切分",
+          "稳定性与重试",
+          "评测与验证"
+        ],
+        "covered": [
+          "检索与切分",
+          "稳定性与重试",
+          "评测与验证"
+        ],
+        "issues": []
+      }
+    ],
+    "errors": [],
+    "warnings": []
+  },
+  "artifacts": {
+    "markdown": {
+      "path": ".project-role-match/<date>-AI-应用开发.md",
+      "sha256": "6f8408e47b167a794339efdea1e9eccfce26e6f3335f1fc805b20039d6ff1b60",
+      "bytes": 6950
+    },
+    "html": {
+      "path": ".project-role-match/<date>-AI-应用开发.html",
+      "sha256": "2a16d7536682e07ec5bda61259faa2bc4d105502c3d9e256e40c72018e875745",
+      "bytes": 23717
+    }
+  }
+}

@@ -1,0 +1,620 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>AI 应用开发 · 项目源码匹配报告</title>
+<script>
+try {
+  const theme = localStorage.getItem("project-role-match-theme");
+  if (theme === "light" || theme === "dark") document.documentElement.dataset.theme = theme;
+} catch {}
+</script>
+<style>
+*, *::before, *::after { box-sizing: border-box; }
+:root {
+  color-scheme: light;
+  --bg: #f6f6f3;
+  --surface: #ffffff;
+  --surface-2: #f1f2ee;
+  --text: #1d2126;
+  --muted: #626b76;
+  --border: #e1e3df;
+  --border-strong: #cfd3cc;
+  --accent: #0f766e;
+  --accent-soft: #d9efec;
+  --code-bg: #eceee9;
+  --warn: #b45309;
+  --warn-soft: #fdf3e3;
+  --shadow: 0 1px 2px rgba(24, 30, 34, .05), 0 12px 32px rgba(24, 30, 34, .06);
+  --mono: ui-monospace, SFMono-Regular, "Cascadia Code", Consolas, "Liberation Mono", monospace;
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #121516;
+  --surface: #191d1f;
+  --surface-2: #202527;
+  --text: #e7e9e7;
+  --muted: #9aa4a2;
+  --border: #2b3234;
+  --border-strong: #3a4244;
+  --accent: #5eead4;
+  --accent-soft: #123a36;
+  --code-bg: #242b2d;
+  --warn: #fbbf24;
+  --warn-soft: #2a2316;
+  --shadow: none;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --bg: #121516;
+    --surface: #191d1f;
+    --surface-2: #202527;
+    --text: #e7e9e7;
+    --muted: #9aa4a2;
+    --border: #2b3234;
+    --border-strong: #3a4244;
+    --accent: #5eead4;
+    --accent-soft: #123a36;
+    --code-bg: #242b2d;
+    --warn: #fbbf24;
+    --warn-soft: #2a2316;
+    --shadow: none;
+  }
+}
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif;
+  font-size: 16px;
+  line-height: 1.75;
+  -webkit-font-smoothing: antialiased;
+}
+a { color: var(--accent); }
+code {
+  font-family: var(--mono);
+  font-size: .9em;
+  background: var(--code-bg);
+  padding: .14em .38em;
+  border-radius: 4px;
+}
+.skip {
+  position: absolute;
+  left: 16px;
+  top: 8px;
+  z-index: 30;
+  padding: 8px 12px;
+  border-radius: 8px;
+  background: var(--surface);
+  color: var(--text);
+  transform: translateY(-200%);
+  transition: transform .15s ease;
+}
+.skip:focus { transform: translateY(0); }
+.layout {
+  display: grid;
+  grid-template-columns: 232px minmax(0, 1fr);
+  gap: 48px;
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 48px 28px 88px;
+}
+.sidebar {
+  position: sticky;
+  top: 32px;
+  align-self: start;
+  max-height: calc(100vh - 64px);
+  overflow: auto;
+}
+.brand {
+  margin: 0;
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.brand::before {
+  content: "";
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  margin-right: 8px;
+  border-radius: 50%;
+  background: var(--accent);
+  vertical-align: 1px;
+}
+.sidebar nav {
+  display: grid;
+  gap: 3px;
+  margin-top: 20px;
+}
+.sidebar nav a {
+  display: flex;
+  gap: 10px;
+  padding: 7px 10px;
+  border-radius: 8px;
+  color: var(--muted);
+  text-decoration: none;
+  font-size: 13.5px;
+  line-height: 1.45;
+}
+.sidebar nav a:hover { color: var(--text); background: var(--surface-2); }
+.sidebar nav a span {
+  flex: none;
+  padding-top: 2px;
+  font-family: var(--mono);
+  font-size: 10.5px;
+  color: var(--accent);
+}
+.sidebar-note {
+  margin: 24px 0 0;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.6;
+}
+main { min-width: 0; }
+.hero {
+  padding: 4px 0 28px;
+  margin-bottom: 24px;
+  border-bottom: 1px solid var(--border);
+}
+.eyebrow {
+  margin: 0;
+  font-family: var(--mono);
+  font-size: 11.5px;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+h1 {
+  margin: 10px 0 0;
+  font-size: clamp(30px, 4.2vw, 46px);
+  line-height: 1.12;
+  letter-spacing: -.025em;
+}
+.hero-sub {
+  margin: 12px 0 0;
+  color: var(--muted);
+  font-size: 14px;
+}
+.card {
+  padding: 26px 28px;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: var(--surface);
+  box-shadow: var(--shadow);
+}
+.overview-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+}
+.overview h2 { margin: 0; font-size: 20px; letter-spacing: -.01em; }
+.stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  color: var(--muted);
+  font-size: 12.5px;
+}
+.stats strong {
+  margin-right: 3px;
+  color: var(--text);
+  font-size: 16px;
+  font-weight: 600;
+}
+.facts {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px 24px;
+  margin: 20px 0 0;
+}
+.facts > div {
+  padding-left: 12px;
+  border-left: 2px solid var(--accent-soft);
+}
+.facts dt {
+  font-size: 11px;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.facts dd { margin: 4px 0 0; font-size: 14px; }
+.facts dd p { margin: 0; }
+.summary { display: grid; gap: 10px; margin-top: 20px; }
+.summary-item {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 14px;
+  padding: 12px 14px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--surface-2);
+  color: var(--text);
+  text-decoration: none;
+  transition: border-color .15s ease;
+}
+.summary-item:hover { border-color: var(--accent); }
+.summary-item strong { color: var(--accent); font-size: 13.5px; }
+.summary-item span { color: var(--muted); font-size: 13.5px; }
+.empty { margin: 0; color: var(--muted); }
+.details-heading {
+  margin: 36px 0 4px;
+  font-size: 12px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.match {
+  margin-top: 20px;
+  scroll-margin-top: 24px;
+}
+.match-head { display: flex; align-items: flex-start; gap: 16px; }
+.match-index {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  border: 1px solid var(--border-strong);
+  border-radius: 50%;
+  font-family: var(--mono);
+  font-size: 13px;
+  color: var(--muted);
+}
+.badge {
+  display: inline-block;
+  padding: 3px 9px;
+  border-radius: 999px;
+  background: var(--accent-soft);
+  color: var(--accent);
+  font-size: 11.5px;
+  font-weight: 600;
+  letter-spacing: .03em;
+}
+.match h2 {
+  margin: 8px 0 0;
+  font-size: 22px;
+  line-height: 1.3;
+  letter-spacing: -.01em;
+}
+.requirement {
+  margin: 16px 0 0;
+  padding: 10px 14px;
+  border-radius: 10px;
+  background: var(--surface-2);
+  font-size: 14px;
+}
+.requirement .label {
+  display: inline-block;
+  margin-right: 10px;
+  color: var(--muted);
+  font-size: 11px;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+.block {
+  margin-top: 22px;
+  padding-top: 18px;
+  border-top: 1px dashed var(--border);
+}
+.block h3 {
+  margin: 0 0 10px;
+  font-size: 11.5px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--muted);
+  font-weight: 600;
+}
+.block p { margin: 0 0 10px; }
+.block p:last-child { margin-bottom: 0; }
+.block ul, .block ol { margin: 0 0 10px; padding-left: 1.4em; }
+.block li { margin: 4px 0; }
+.evidence { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.evidence li {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 10px;
+  font-size: 14px;
+}
+.evidence a { color: var(--accent); text-decoration: none; font-weight: 500; }
+.evidence a:hover { text-decoration: underline; text-underline-offset: 3px; }
+.evidence .lines { color: var(--muted); font-size: 12.5px; }
+.qa {
+  margin-top: 10px;
+  padding: 0 16px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--surface-2);
+}
+.qa summary {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  padding: 13px 0;
+  list-style: none;
+  cursor: pointer;
+  font-size: 14.5px;
+  font-weight: 500;
+}
+.qa summary::-webkit-details-marker { display: none; }
+.qa summary::after {
+  content: "+";
+  margin-left: auto;
+  color: var(--muted);
+  font-size: 18px;
+  line-height: 1;
+}
+.qa[open] summary::after { content: "−"; }
+.qa summary .q-index {
+  flex: none;
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--accent);
+}
+.qa summary .q-text { min-width: 0; }
+.qa[open] { padding-bottom: 16px; }
+.qa-answer {
+  margin-top: 2px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+  font-size: 14px;
+}
+.qa-answer p:first-child { margin-top: 0; }
+.gaps {
+  margin-top: 24px;
+  padding: 22px 24px;
+  border: 0;
+  border-left: 4px solid var(--warn);
+  border-radius: 4px 12px 12px 4px;
+  background: var(--warn-soft);
+  box-shadow: none;
+}
+.gaps h2 { margin: 0 0 10px; font-size: 18px; }
+.gaps ul { margin: 0; padding-left: 1.3em; }
+.gaps li { margin: 6px 0; }
+.gaps p { margin: 0; }
+.footer {
+  margin-top: 36px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+  color: var(--muted);
+  font-size: 12px;
+}
+.theme-toggle {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 20;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--surface);
+  color: var(--text);
+  font: inherit;
+  font-size: 12.5px;
+  cursor: pointer;
+  box-shadow: var(--shadow);
+}
+.theme-toggle:hover { border-color: var(--border-strong); }
+.theme-toggle .dot {
+  width: 11px;
+  height: 11px;
+  border: 1px solid var(--text);
+  border-radius: 50%;
+  background: linear-gradient(90deg, var(--text) 50%, transparent 50%);
+}
+.theme-toggle:focus-visible, .sidebar nav a:focus-visible, .summary-item:focus-visible, .qa summary:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+@media (max-width: 900px) {
+  .layout { grid-template-columns: 1fr; gap: 24px; padding: 28px 18px 64px; }
+  .sidebar { position: static; max-height: none; }
+  .sidebar nav { display: flex; flex-wrap: wrap; gap: 8px; }
+  .sidebar nav a {
+    padding: 6px 10px;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    background: var(--surface);
+  }
+  .sidebar-note { display: none; }
+  .hero { padding-right: 92px; }
+}
+@media (max-width: 560px) {
+  .card { padding: 20px; border-radius: 12px; }
+  .match-head { gap: 12px; }
+  .match-index { width: 36px; height: 36px; font-size: 12px; }
+  .match h2 { font-size: 19px; }
+  .theme-toggle { top: 12px; right: 12px; padding: 7px 10px; }
+}
+@media print {
+  .sidebar, .theme-toggle, .skip { display: none; }
+  .layout { display: block; max-width: none; padding: 0; }
+  body { background: #fff; color: #000; }
+  .card { border-color: #ccc; box-shadow: none; break-inside: avoid; }
+  .match { break-inside: auto; }
+  .gaps { background: #f7f7f7; }
+  a { color: #000; }
+  details:not([open]) > *:not(summary) { display: block; }
+  details > summary::after { content: ""; }
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">跳到正文</a>
+<div class="layout">
+<aside class="sidebar">
+<p class="brand">project-role-match</p>
+<nav aria-label="报告目录">
+<a href="#overview"><span>00</span>岗位匹配总览</a>
+<a href="#match-1"><span>01</span>带重叠的文档切分与分数阈值检索</a>
+<a href="#match-2"><span>02</span>有界重试与指数退避</a>
+<a href="#match-3"><span>03</span>离线检索与引用覆盖评测</a>
+<a href="#gaps"><span>--</span>待核实事项</a>
+</nav>
+<p class="sidebar-note">3 个匹配点<br>12 条源码引用</p>
+</aside>
+<main id="main">
+<header class="hero">
+<p class="eyebrow">项目源码匹配报告</p>
+<h1>AI 应用开发</h1>
+<p class="hero-sub">基于源码证据的岗位匹配与面试准备报告</p>
+</header>
+<section class="card overview" id="overview">
+<div class="overview-head">
+<h2>岗位匹配总览</h2>
+<div class="stats"><span><strong>3</strong>匹配点</span><span><strong>12</strong>条源码引用</span><span><strong>2</strong>项待核实</span></div>
+</div>
+<dl class="facts">
+<div><dt>判断依据</dt><dd><p>按 AI 应用开发岗的通用职责分析，重点检查检索质量、模型调用稳定性和离线评测。</p></dd></div>
+<div><dt>检查范围</dt><dd><p>RAG 示例的文档切分、检索阈值、模型调用重试和离线评测函数。</p></dd></div>
+<div><dt>版本</dt><dd><p>本次检查的是工作区文件。</p></dd></div>
+</dl>
+<div class="summary">
+<a class="summary-item" href="#match-1"><strong>检索与切分</strong><span>带重叠的文档切分与分数阈值检索</span></a>
+<a class="summary-item" href="#match-2"><strong>稳定性与重试</strong><span>有界重试与指数退避</span></a>
+<a class="summary-item" href="#match-3"><strong>评测与验证</strong><span>离线检索与引用覆盖评测</span></a>
+</div>
+</section>
+<h2 class="details-heading">知识点详解</h2>
+<article class="card match" id="match-1">
+<div class="match-head">
+<span class="match-index">01</span>
+<div><span class="badge">检索与切分</span><h2>带重叠的文档切分与分数阈值检索</h2></div>
+</div>
+<p class="requirement"><span class="label">对应岗位要求</span>检索质量与上下文构造</p>
+<section class="block"><h3>项目做法</h3><p>切分函数按 size 切片并保留 overlap，避免关键信息被切断；检索先扩大候选集，再按 min_score 过滤并截断到 top_k。</p></section>
+<section class="block"><h3>执行流程</h3><p>chunk_document 先校验 size 和 overlap；从位置 0 开始截取 size 个字符并追加 Chunk；索引递增；到文本末尾就停止，否则把起点回退 overlap 继续切。retrieve 先对查询做 embedding，取 top_k*3 候选，过滤低于 min_score 的项，再截断到 top_k；answer 把命中块拼成带来源标记的上下文。</p></section>
+<section class="block"><h3>设计取舍</h3><p>重叠切分保留跨块上下文，代价是索引体积和重复内容增加；先扩大候选再过滤提高召回，但增加一次打分和过滤开销。</p></section>
+<section class="block"><h3>适用边界</h3><p>按字符数切分不保证句子或段落边界；min_score 和 top_k 未在真实语料上校准；示例没有处理多语言或超长文档。</p></section>
+<section class="block"><h3>源码证据</h3><ul class="evidence"><li><a href="../rag_pipeline.py"><code>rag_pipeline.py</code></a><span class="lines">第 14 行</span></li>
+<li><a href="../rag_pipeline.py"><code>rag_pipeline.py</code></a><span class="lines">第 26 行</span></li>
+<li><a href="../rag_pipeline.py"><code>rag_pipeline.py</code></a><span class="lines">第 33 行</span></li>
+<li><a href="../rag_pipeline.py"><code>rag_pipeline.py</code></a><span class="lines">第 55 行</span></li></ul></section>
+<section class="block"><h3>面试讲法</h3><p>可以讲切分重叠和检索阈值如何共同影响召回，以及为什么要先扩大候选再过滤。</p></section>
+<section class="block">
+<h3>面试追问与答题要点</h3>
+<details class="qa">
+<summary><span class="q-index">Q1</span><span class="q-text">为什么切分要保留 overlap？</span></summary>
+<div class="qa-answer"><p>重叠让相邻块共享边界文本，避免关键句被切断后检索不到；代价是索引体积和重复内容增加。示例默认 400 字符切分、80 字符重叠，最终参数需要在真实文档上评测。</p></div>
+</details>
+<details class="qa">
+<summary><span class="q-index">Q2</span><span class="q-text">为什么要先取 top_k * 3 再过滤？</span></summary>
+<div class="qa-answer"><p>直接取 top_k 再过滤可能因为低分项被剔除而导致结果不足；先扩大候选集，再按 min_score 过滤，最后截断到 top_k，能兼顾召回和延迟。</p></div>
+</details>
+<details class="qa">
+<summary><span class="q-index">Q3</span><span class="q-text">min_score 设成 0.72 的依据是什么？</span></summary>
+<div class="qa-answer"><p>示例给了一个可运行的默认值，但源码没有记录校准过程。生产上应该用标注好的查询-文档对做召回/精确率权衡，而不是直接沿用示例值。</p></div>
+</details>
+</section>
+</article>
+<article class="card match" id="match-2">
+<div class="match-head">
+<span class="match-index">02</span>
+<div><span class="badge">稳定性与重试</span><h2>有界重试与指数退避</h2></div>
+</div>
+<p class="requirement"><span class="label">对应岗位要求</span>第三方模型调用的容错</p>
+<section class="block"><h3>项目做法</h3><p>模型调用只重试超时和传输错误，最多 3 次，间隔从 0.5 秒翻倍；最后一次失败继续抛出，其他 HTTP 错误直接暴露。</p></section>
+<section class="block"><h3>执行流程</h3><p>_chat_with_retry 设置初始 delay；在 attempt 1 到 3 的循环中发起带 20 秒超时的 POST，并用 raise_for_status 抛出 HTTP 错误；只捕获超时和传输错误；未到最后一次时 sleep 后把 delay 翻倍；最后一次重新抛出。</p></section>
+<section class="block"><h3>设计取舍</h3><p>只重试瞬时网络错误，避免对 4xx 等确定性错误做无意义重试；指数退避降低连续失败时的压力。代价是同步 sleep 会阻塞工作线程，且没有抖动。</p></section>
+<section class="block"><h3>适用边界</h3><p>没有重试预算、熔断或幂等键；如果请求已被服务端处理，重试可能产生重复计费；示例没有故障注入测试。</p></section>
+<section class="block"><h3>源码证据</h3><ul class="evidence"><li><a href="../rag_pipeline.py"><code>rag_pipeline.py</code></a><span class="lines">第 37 行</span></li>
+<li><a href="../rag_pipeline.py"><code>rag_pipeline.py</code></a><span class="lines">第 44 行</span></li>
+<li><a href="../rag_pipeline.py"><code>rag_pipeline.py</code></a><span class="lines">第 47 行</span></li>
+<li><a href="../rag_pipeline.py"><code>rag_pipeline.py</code></a><span class="lines">第 48 行</span></li></ul></section>
+<section class="block"><h3>面试讲法</h3><p>可以讲第三方模型调用的重试边界、退避策略和哪些错误不该重试。</p></section>
+<section class="block">
+<h3>面试追问与答题要点</h3>
+<details class="qa">
+<summary><span class="q-index">Q1</span><span class="q-text">为什么只重试超时和传输错误？</span></summary>
+<div class="qa-answer"><p>4xx 通常是请求本身有问题，重试不会改变结果；超时和连接错误更可能是瞬时故障。示例只捕获 TimeoutException 和 TransportError，让其他错误直接暴露。</p></div>
+</details>
+<details class="qa">
+<summary><span class="q-index">Q2</span><span class="q-text">为什么重试间隔要翻倍？</span></summary>
+<div class="qa-answer"><p>指数退避可以避免连续失败时持续打满服务端。示例从 0.5 秒开始翻倍，但同步 sleep 会阻塞线程，且没有随机抖动，多个客户端可能同时重试。</p></div>
+</details>
+<details class="qa">
+<summary><span class="q-index">Q3</span><span class="q-text">如何验证重试逻辑？</span></summary>
+<div class="qa-answer"><p>用故障注入让前两次请求超时、第三次成功，断言调用次数和最终结果；再断言第 3 次仍失败时会抛出。示例没有包含这类测试，属于待核实项。</p></div>
+</details>
+</section>
+</article>
+<article class="card match" id="match-3">
+<div class="match-head">
+<span class="match-index">03</span>
+<div><span class="badge">评测与验证</span><h2>离线检索与引用覆盖评测</h2></div>
+</div>
+<p class="requirement"><span class="label">对应岗位要求</span>RAG 效果验证与回归</p>
+<section class="block"><h3>项目做法</h3><p>eval_rag.py 用 hit_rate 检查检索结果是否命中期望来源，用 citation_coverage 检查回答是否覆盖期望引用，均返回比例。</p></section>
+<section class="block"><h3>执行流程</h3><p>hit_rate 遍历用例，调用 retrieve，把结果转成 doc#index 集合，与 expected_sources 求交集并计数；citation_coverage 遍历回答和期望来源，检查期望集合是否为回答来源的子集；两者都返回命中比例。</p></section>
+<section class="block"><h3>设计取舍</h3><p>基于来源集合的评测确定性强、成本低，适合回归；但它只验证有没有命中或引用，不评价回答事实正确性和表达质量。</p></section>
+<section class="block"><h3>适用边界</h3><p>示例用例规模小，没有置信区间或统计显著性；citation_coverage 使用 zip，长度不一致时会静默截断；未接入线上日志。</p></section>
+<section class="block"><h3>源码证据</h3><ul class="evidence"><li><a href="../eval_rag.py"><code>eval_rag.py</code></a><span class="lines">第 4 行</span></li>
+<li><a href="../eval_rag.py"><code>eval_rag.py</code></a><span class="lines">第 9 行</span></li>
+<li><a href="../eval_rag.py"><code>eval_rag.py</code></a><span class="lines">第 14 行</span></li>
+<li><a href="../eval_rag.py"><code>eval_rag.py</code></a><span class="lines">第 18 行</span></li></ul></section>
+<section class="block"><h3>面试讲法</h3><p>可以讲如何用离线评测验证 RAG 检索和引用，而不是只看主观回答。</p></section>
+<section class="block">
+<h3>面试追问与答题要点</h3>
+<details class="qa">
+<summary><span class="q-index">Q1</span><span class="q-text">hit_rate 衡量了什么，没有衡量什么？</span></summary>
+<div class="qa-answer"><p>它衡量检索结果是否至少命中一个期望来源，适合做回归；它不衡量排序质量、重复率或最终回答是否正确。需要配合 MRR、nDCG 或答案级评测。</p></div>
+</details>
+<details class="qa">
+<summary><span class="q-index">Q2</span><span class="q-text">citation_coverage 为什么用子集判断？</span></summary>
+<div class="qa-answer"><p>它要求期望的每个来源都出现在回答的 sources 中，检查引用是否完整。但它只比较集合，不检查正文是否真的引用了来源，也不检查引用位置是否正确。</p></div>
+</details>
+<details class="qa">
+<summary><span class="q-index">Q3</span><span class="q-text">如何让这个评测更适合回归？</span></summary>
+<div class="qa-answer"><p>固定用例和期望来源，加入版本化的基线、最小样本量和阈值；对长度不一致的 zip 增加显式校验；再把线上失败案例回流到用例集。</p></div>
+</details>
+</section>
+</article>
+<section class="gaps" id="gaps">
+<h2>待核实事项</h2>
+<ul><li><p>示例没有真实语料规模、线上延迟和回答质量评测。</p></li><li><p>重试策略未通过故障注入验证。</p></li></ul>
+</section>
+<footer class="footer">由 project-role-match 生成 · 源码链接相对于本报告所在目录</footer>
+</main>
+</div>
+<button class="theme-toggle" id="theme-toggle" type="button" aria-label="切换主题"><span class="dot" aria-hidden="true"></span><span id="theme-label">深色</span></button>
+<script>
+(() => {
+  const root = document.documentElement;
+  const button = document.getElementById("theme-toggle");
+  const label = document.getElementById("theme-label");
+  const current = () => root.dataset.theme || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+  const sync = () => {
+    const dark = current() === "dark";
+    label.textContent = dark ? "浅色" : "深色";
+    button.setAttribute("aria-label", dark ? "切换到浅色主题" : "切换到深色主题");
+  };
+  button.addEventListener("click", () => {
+    const next = current() === "dark" ? "light" : "dark";
+    root.dataset.theme = next;
+    try { localStorage.setItem("project-role-match-theme", next); } catch {}
+    sync();
+  });
+  sync();
+})();
+</script>
+</body>
+</html>

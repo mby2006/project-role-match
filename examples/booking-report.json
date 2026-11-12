@@ -1,0 +1,53 @@
+{
+  "role": "后端开发",
+  "basis": "按后端开发岗的通用职责分析，重点检查接口和数据库写入。",
+  "scope": "预约样例的路由注册函数、写入 SQL 和建表定义。",
+  "matches": [
+    {
+      "title": "重复预约处理",
+      "category": "数据库与数据一致性",
+      "requirement": "数据库约束与接口重试",
+      "finding": "样例在路由注册函数中定义预约接口。写入时以用户和时段为组合键，冲突时走更新分支并返回预约 ID。",
+      "interview": "可以讲同一用户重试预约同一时段时，唯一约束怎样阻止第二条记录，以及 SQL 怎样返回预约 ID。",
+      "analysis": {
+        "flow": "注册函数定义 POST /bookings。处理器从请求体取出用户和时段 ID，把它们作为参数提交给 PostgreSQL。写入成功时返回新 ID；命中组合唯一约束时更新冲突行并返回已有 ID。处理器将数据库返回值作为 JSON 发出。",
+        "tradeoffs": "把重复判断放在数据库里，使不同请求处理器共享同一条约束。使用 DO UPDATE 可以直接用 RETURNING 取已有 ID，但即使列值相同也走更新路径，需要考虑写放大和触发器副作用。",
+        "limits": "约束只覆盖同一用户和同一时段，无法证明一个时段只能被一人预约。源码也没有提供并发压测结果或数据库异常到 HTTP 状态码的映射。"
+      },
+      "questions": [
+        {
+          "question": "为什么不先查有没有预约，再决定要不要插入？",
+          "answer": "两个请求可能同时查不到记录，然后都发起写入。示例在数据库用 UNIQUE (user_id, slot_id) 保证组合键唯一，并用 ON CONFLICT 定义冲突时的行为。"
+        },
+        {
+          "question": "为什么用 DO UPDATE，改成 DO NOTHING 会怎样？",
+          "answer": "这里要在一条语句里返回预约 ID。DO NOTHING 跳过冲突行，RETURNING 不会返回该行的 ID。DO UPDATE 可以返回已有 ID，代价是冲突时走更新路径。"
+        },
+        {
+          "question": "如何验证重复请求的行为？",
+          "answer": "在使用该建表定义的数据库上，同时提交多次相同用户和时段的请求，断言最终只有一行且成功响应的 ID 一致。再用两个不同用户请求同一时段，核实组合键允许这两条记录。"
+        }
+      ],
+      "evidence": [
+        {
+          "path": "bookings.mjs",
+          "startLine": 2,
+          "excerpt": "  router.post(\"/bookings\", async (request, response) => {"
+        },
+        {
+          "path": "bookings.mjs",
+          "startLine": 6,
+          "excerpt": "        \"ON CONFLICT (user_id, slot_id) DO UPDATE SET slot_id = EXCLUDED.slot_id \" +\n        \"RETURNING id\","
+        },
+        {
+          "path": "schema.sql",
+          "startLine": 5,
+          "excerpt": "  UNIQUE (user_id, slot_id)"
+        }
+      ]
+    }
+  ],
+  "gaps": [
+    "这个示例只包含路由注册函数与数据库定义，应用启动接入和并发运行结果有待验证。"
+  ]
+}

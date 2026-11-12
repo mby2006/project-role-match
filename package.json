@@ -1,0 +1,15 @@
+{
+  "name": "project-role-match",
+  "version": "0.4.0",
+  "private": true,
+  "description": "Source-backed job match reports for coding agents",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "test": "node --test test/cli.test.mjs test/golden.test.mjs",
+    "test:golden": "node --test test/golden.test.mjs",
+    "test:update-golden": "node scripts/update-golden.mjs",
+    "doctor": "node project-role-match/bin/project-role-match.mjs doctor"
+  }
+}
