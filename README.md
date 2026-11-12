@@ -20,13 +20,19 @@
 
 ## 安装到项目
 
-从目标项目根目录执行，将源路径替换为本仓库中直接包含 `SKILL.md`、`bin/` 和 `references/` 的内层 `project-role-match` 目录的绝对路径。
+从目标项目根目录执行。已发布到 GitHub，可直接从仓库地址安装：
 
 ```sh
-npx skills add "<源码仓库>/project-role-match" --skill project-role-match --copy
+npx skills add https://github.com/mby2006/project-role-match/tree/main/project-role-match --skill project-role-match --copy
 ```
 
-可以用 `--agent` 指定工具，也可以重复这个选项安装到多个工具。例如在上述命令后加 `--agent claude-code --agent opencode`。常见取值还有 `cursor`、`github-copilot`、`gemini-cli` 和 `codex`。跨项目使用时加 `--global`。[安装器用法与 Node.js 要求](https://github.com/vercel-labs/skills#install-a-skill) · [工具及安装目录](https://github.com/vercel-labs/skills/blob/main/docs/agents.md)
+本地开发时，把源路径替换为仓库内层 `project-role-match` 目录的绝对路径：
+
+```sh
+npx skills add "<本地仓库>/project-role-match" --skill project-role-match --copy
+```
+
+Skill 本身要求 Node.js 20+；`skills` 安装器当前要求 Node.js 22.20+。可以用 `--agent` 指定工具，也可以重复这个选项安装到多个工具。例如在上述命令后加 `--agent claude-code --agent opencode`。常见取值还有 `cursor`、`github-copilot`、`gemini-cli` 和 `codex`。跨项目使用时加 `--global`。[安装器用法与 Node.js 要求](https://github.com/vercel-labs/skills#install-a-skill) · [工具及安装目录](https://github.com/vercel-labs/skills/blob/main/docs/agents.md)
 
 离线时，把整个内层 `project-role-match` 目录复制到所用工具的项目级 Skill 目录。例如 Claude Code 使用 `.claude/skills/`，Codex 和 OpenCode 可以使用 `.agents/skills/`。复制后可以运行 `node "<已安装的 Skill>/bin/project-role-match.mjs" doctor` 检查文件是否齐全。也可以把 [`llms.txt`](llms.txt) 交给智能体，请它按你指定的工具和安装范围操作。
 
