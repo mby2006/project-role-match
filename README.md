@@ -130,11 +130,13 @@ npm run test:update-golden
 
 ```text
 project-role-match/
+├── LICENSE                      # MIT
 ├── README.md
 ├── SKILL.md                     # 指向可安装的 Skill
 ├── llms.txt
 ├── package.json
 ├── project-role-match/          # 可独立安装的 Skill 目录
+│   ├── LICENSE                  # MIT，随 Skill 一起分发
 │   ├── SKILL.md
 │   ├── bin/                     # 引用与回执校验、质量门禁、Markdown/HTML 渲染
 │   └── references/
@@ -143,3 +145,7 @@ project-role-match/
 └── test/                       # CLI、门禁、回执与 golden 输出测试
     └── golden/                 # 固定输入的 Markdown/HTML/回执基线
 ```
+
+## License
+
+[MIT](LICENSE) © 2026 mby

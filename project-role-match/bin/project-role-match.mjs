@@ -282,6 +282,7 @@ async function main([command, ...args]) {
   }
   if (command === "doctor" && args.length === 0) {
     await readFile(new URL("../SKILL.md", import.meta.url));
+    await readFile(new URL("../LICENSE", import.meta.url));
     await readFile(new URL("../references/report-input.md", import.meta.url));
     await readFile(new URL("../references/evidence-contract.md", import.meta.url));
     console.log(JSON.stringify({ ok: true, node: process.versions.node }));

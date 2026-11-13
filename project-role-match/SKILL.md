@@ -1,6 +1,7 @@
 ---
 name: project-role-match
 description: "按目标岗位或招聘 JD 检索项目源码，生成含源码证据、面试讲述角度和证据缺口的 Markdown 与独立 HTML 报告，并通过引用校验与 strict 质量门禁。用于选项目亮点、准备技术面试，或核实项目是否满足某项岗位要求。"
+license: MIT
 ---
 
 # 岗位与项目源码匹配
