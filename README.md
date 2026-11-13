@@ -78,7 +78,7 @@ node project-role-match/bin/project-role-match.mjs write --root examples/search 
 ```json
 {
   "schema": "project-role-match.receipt/1",
-  "tool": { "name": "project-role-match", "version": "0.4.0" },
+  "tool": { "name": "project-role-match", "version": "<version>" },
   "ok": true,
   "quality": {
     "profile": "strict",
@@ -115,6 +115,7 @@ node project-role-match/bin/project-role-match.mjs verify --root "<项目根目�
 
 - `test/cli.test.mjs`：CLI 行为、安装后副本、引用校验、质量门禁、回执与 `verify`
 - `test/golden.test.mjs`：对 `booking`、`search`、`rag` 三个示例重新生成报告，逐字节比对 Markdown/HTML，并比对规范化后的回执
+- `test/metadata.test.mjs`：Skill 的 fallback 版本与 `package.json` 一致，`package.json` 的许可证与 `LICENSE` 一致
 
 回执在比对前会把 `tool.version`、`generatedAt` 和产物文件名中的日期替换为占位符，避免时间相关字段导致基线漂移。golden 失败时会给出第一处差异行和对应的刷新命令。
 
@@ -126,10 +127,34 @@ npm run test:update-golden
 
 只想跑 golden 测试时用 `npm run test:golden`。
 
+## 发版
+
+日常提交不需要改版本号。准备发版时运行：
+
+```sh
+npm run release:prepare -- patch   # 或 minor / major / 0.5.0
+```
+
+脚本会检查工作区是否干净，然后：
+
+- 同步更新 `package.json` 和 `project-role-match/bin/version.mjs`
+- 在 `CHANGELOG.md` 顶部插入一条带日期的版本条目
+- 运行完整测试；失败时自动恢复这三个文件
+
+脚本不会自动提交、打 tag 或推送。检查 CHANGELOG 后，按脚本输出的命令提交、打 tag 并推送：
+
+```sh
+git add package.json project-role-match/bin/version.mjs CHANGELOG.md
+git commit -m "chore: release v0.5.0"
+git tag v0.5.0
+git push && git push --tags
+```
+
 ## 仓库结构
 
 ```text
 project-role-match/
+├── CHANGELOG.md
 ├── LICENSE                      # MIT
 ├── README.md
 ├── SKILL.md                     # 指向可安装的 Skill
@@ -141,8 +166,8 @@ project-role-match/
 │   ├── bin/                     # 引用与回执校验、质量门禁、Markdown/HTML 渲染
 │   └── references/
 ├── examples/                   # 后端/前端/AI 三个示例与报告输入
-├── scripts/                    # golden 基线更新脚本
-└── test/                       # CLI、门禁、回执与 golden 输出测试
+├── scripts/                    # golden 基线更新与发版准备脚本
+└── test/                       # CLI、门禁、回执、元数据与 golden 输出测试
     └── golden/                 # 固定输入的 Markdown/HTML/回执基线
 ```
 

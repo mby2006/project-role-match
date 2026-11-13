@@ -8,9 +8,10 @@
     "node": ">=20"
   },
   "scripts": {
-    "test": "node --test test/cli.test.mjs test/golden.test.mjs",
+    "test": "node --test test/cli.test.mjs test/golden.test.mjs test/metadata.test.mjs",
     "test:golden": "node --test test/golden.test.mjs",
     "test:update-golden": "node scripts/update-golden.mjs",
+    "release:prepare": "node scripts/release-prepare.mjs",
     "doctor": "node project-role-match/bin/project-role-match.mjs doctor"
   }
 }

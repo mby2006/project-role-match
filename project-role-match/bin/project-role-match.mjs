@@ -7,10 +7,10 @@ import { parseArgs } from "node:util";
 import { renderReportHtml } from "./report-html.mjs";
 import { evaluateReportQuality } from "./report-quality.mjs";
 import { buildReceipt, verifyReceipt } from "./report-receipt.mjs";
+import { fallbackToolVersion } from "./version.mjs";
 
 const reportDirectory = ".project-role-match";
 const excludedDirectories = new Set([reportDirectory, ".git"]);
-const fallbackToolVersion = "0.4.0";
 
 const usage = `Usage:
   node project-role-match.mjs doctor
