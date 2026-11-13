@@ -1,4 +1,4 @@
-import { execFileSync } from "node:child_process";
+import { execFileSync, execSync } from "node:child_process";
 import { readFile, rm, writeFile } from "node:fs/promises";
 import { fileURLToPath } from "node:url";
 
@@ -119,7 +119,7 @@ async function main() {
       "utf8",
     );
     await writeFile(changelogUrl, addChangelogEntry(changelog, target), "utf8");
-    execFileSync("npm", ["test"], { cwd: root, stdio: "inherit", shell: true });
+    execSync("npm test", { cwd: root, stdio: "inherit" });
   } catch (error) {
     await restore(originals);
     throw error;
